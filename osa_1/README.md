@@ -1,0 +1,1 @@
+Folder for exercises in part 1.
