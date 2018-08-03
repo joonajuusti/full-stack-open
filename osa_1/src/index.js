@@ -8,10 +8,21 @@ const Otsikko = props => {
   )
 }
 
-const Sisalto = props => {
+const Osa = props => {
   const { partName, exercisesAmount } = props
   return (
       <p>{partName} {exercisesAmount}</p>
+  )
+}
+
+const Sisalto = props => {
+  const { partName1, exercisesAmount1, partName2, exercisesAmount2, partName3, exercisesAmount3 } = props
+  return (
+    <div>
+      <Osa partName={partName1} exercisesAmount={exercisesAmount1} />
+      <Osa partName={partName2} exercisesAmount={exercisesAmount2} />
+      <Osa partName={partName3} exercisesAmount={exercisesAmount3} />
+    </div>
   )
 }
 
@@ -35,9 +46,14 @@ const App = () => {
   return (
     <div>
       <Otsikko title={kurssi}/>
-      <Sisalto partName={osa1} exercisesAmount={tehtavia1} />
-      <Sisalto partName={osa2} exercisesAmount={tehtavia2} />
-      <Sisalto partName={osa3} exercisesAmount={tehtavia3} />
+      <Sisalto
+        partName1={osa1}
+        exercisesAmount1={tehtavia1}
+        partName2={osa2}
+        exercisesAmount2={tehtavia2}
+        partName3={osa3}
+        exercisesAmount3={tehtavia3}
+      />
       <Yhteensa exercisesAmount1={tehtavia1} exercisesAmount2={tehtavia2} exercisesAmount3={tehtavia3} />
     </div>
   )
