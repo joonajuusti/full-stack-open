@@ -2,59 +2,58 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const Otsikko = props => {
-  const { title } = props
+  const { otsikko } = props
   return (
-      <h1>{title}</h1>
+      <h1>{otsikko}</h1>
   )
 }
 
 const Osa = props => {
-  const { partName, exercisesAmount } = props
+  const { osa } = props
   return (
-      <p>{partName} {exercisesAmount}</p>
+      <p>{osa.nimi} {osa.tehtavia}</p>
   )
 }
 
 const Sisalto = props => {
-  const { partName1, exercisesAmount1, partName2, exercisesAmount2, partName3, exercisesAmount3 } = props
+  const { osa1, osa2, osa3 } = props
   return (
     <div>
-      <Osa partName={partName1} exercisesAmount={exercisesAmount1} />
-      <Osa partName={partName2} exercisesAmount={exercisesAmount2} />
-      <Osa partName={partName3} exercisesAmount={exercisesAmount3} />
+      <Osa osa={osa1} />
+      <Osa osa={osa2} />
+      <Osa osa={osa3} />
     </div>
   )
 }
 
 const Yhteensa = props => {
-  const { exercisesAmount1, exercisesAmount2, exercisesAmount3 } = props
-  const totalExerciseAmount = exercisesAmount1 + exercisesAmount2 + exercisesAmount3
+  const { tehtavia1, tehtavia2, tehtavia3 } = props
+  const tehtaviaYhteensa = tehtavia1 + tehtavia2 + tehtavia3
   return (
-    <p>yhteensä {totalExerciseAmount} tehtävää</p>
+    <p>yhteensä {tehtaviaYhteensa} tehtävää</p>
   )
 }
 
 const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
-  const osa1 = 'Reactin perusteet'
-  const tehtavia1 = 10
-  const osa2 = 'Tiedonvälitys propseilla'
-  const tehtavia2 = 7
-  const osa3 = 'Komponenttien tila'
-  const tehtavia3 = 14
+  const osa1 = {
+    nimi: 'Reactin perusteet',
+    tehtavia: 10
+  }
+  const osa2 = {
+    nimi: 'Tiedonvälitys propseilla',
+    tehtavia: 7
+  }
+  const osa3 = {
+    nimi: 'Komponenttien tila',
+    tehtavia: 14
+  }
 
   return (
     <div>
-      <Otsikko title={kurssi}/>
-      <Sisalto
-        partName1={osa1}
-        exercisesAmount1={tehtavia1}
-        partName2={osa2}
-        exercisesAmount2={tehtavia2}
-        partName3={osa3}
-        exercisesAmount3={tehtavia3}
-      />
-      <Yhteensa exercisesAmount1={tehtavia1} exercisesAmount2={tehtavia2} exercisesAmount3={tehtavia3} />
+      <Otsikko otsikko={kurssi}/>
+      <Sisalto osa1={osa1} osa2={osa2} osa3={osa3}/>
+      <Yhteensa tehtavia1={osa1.tehtavia} tehtavia2={osa2.tehtavia} tehtavia3={osa3.tehtavia}/>
     </div>
   )
 }
