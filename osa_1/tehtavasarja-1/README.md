@@ -1,1 +1,1 @@
-Folder for exercises in part 1.
+Folder for the first exercise set in part 1.
