@@ -1,63 +1,9 @@
 import React from 'react'
-import personService from './services/persons'
-
-const FilterForm = ({ filter, handleFilterChange }) => {
-  return(
-    <div>
-      rajaa: 
-      <input
-        value={filter}
-        onChange={handleFilterChange}
-      />
-    </div>
-  )
-}
-
-const PersonForm = ({ newName, newNumber, handleNameChange, handleNumberChange, addPerson }) => {
-  return(
-    <div>
-      <h2>Lisää uusi</h2>
-        <form onSubmit={addPerson}>
-          <div>
-            nimi: 
-            <input
-              value={newName}
-              onChange={handleNameChange}
-            />
-            <br />
-            numero: 
-            <input
-              value={newNumber}
-              onChange={handleNumberChange}
-            />
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
-    </div>
-  )
-}
-
-const PersonList = ({ persons, filter, deletePerson }) => {
-  return(
-    <div>
-      <h2>Numerot</h2>
-        {persons.filter(person => (
-          person.name.toLowerCase().includes(filter.toLowerCase()))
-        ).map(person => <PersonListItem key={person.id} person={person} deletePerson={deletePerson}/>)}
-    </div>
-  )
-}
-
-const PersonListItem = ({ person, deletePerson }) => {
-  return(
-    <div>
-      {person.name} {person.number} 
-      <button style={{margin: '5px 10px'}} onClick={deletePerson(person.id)}>poista</button>
-    </div>
-  )
-}
+import personService from '../services/persons'
+import FilterForm from './FilterForm'
+import PersonForm from './PersonForm'
+import PersonList from './PersonList'
+import Notification from './Notification'
 
 class App extends React.Component {
   constructor(props) {
@@ -66,13 +12,15 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      notification: { status: '', message: '' }
     }
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleNumberChange = this.handleNumberChange.bind(this)
     this.addPerson = this.addPerson.bind(this)
     this.deletePerson = this.deletePerson.bind(this)
     this.updatePerson = this.updatePerson.bind(this)
+    this.createNotification = this.createNotification.bind(this)
   }
 
   componentDidMount() {
@@ -105,7 +53,12 @@ class App extends React.Component {
     const person = { name: newName, number: newNumber }
     personService
       .create(person)
-      .then(newPerson => this.setState({ persons: persons.concat(newPerson), newName: '', newNumber: '' }))
+      .then(newPerson => this.setState({
+        persons: persons.concat(newPerson),
+        newName: '',
+        newNumber: '',
+      }))
+      this.createNotification('success', `${person.name} lisättiin`)
   }
 
   deletePerson = id => () => {
@@ -113,7 +66,10 @@ class App extends React.Component {
     if(window.confirm(`poistetaanko ${persons.find(person => person.id === id).name}`)) {
       personService
         .deletePerson(id)
-        .then(response => this.setState({ persons: persons.filter(person => person.id !== id) }))
+        .then(response => this.setState({
+          persons: persons.filter(person => person.id !== id),
+        }))
+        this.createNotification('success', `${persons.find(person => person.id === id).name} poistettiin`)
     }
   }
 
@@ -125,16 +81,31 @@ class App extends React.Component {
       .update(id, changedPerson)
       .then(response => {
         this.setState({
-          persons: persons.map(person => person.id !== id ? person : response)
+          persons: persons.map(person => person.id !== id ? person : response),
         })
+        this.createNotification('success', `${changedPerson.name} päivitettiin`)
+      })
+      .catch(error => {
+        this.setState({
+          persons: persons.filter(person => person.id !== id),
+        })
+        this.createNotification('error', `${changedPerson.name} on jo poistettu`)
       })
   }
 
+  createNotification = (status, message) => {
+    this.setState({ notification: { status, message }})
+    setTimeout(() => {
+      this.setState({ notification: { status: '', message: ''}})
+    }, 3000)
+  }
+
   render() {
-    const { persons, newName, newNumber, filter } = this.state
+    const { persons, newName, newNumber, filter, notification } = this.state
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <Notification notification={notification}/>
         <FilterForm filter={filter} handleFilterChange={this.handleFilterChange}/>
         <PersonForm
           newName={newName}
