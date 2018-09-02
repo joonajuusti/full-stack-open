@@ -5,7 +5,8 @@ const userSchema = new Schema({
   username: String,
   password: String,
   name: String,
-  isOfLegalAge: { type: Boolean, default: true }
+  isOfLegalAge: { type: Boolean, default: true },
+  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }]
 })
 
 userSchema.statics.format = function(user) {
@@ -13,7 +14,8 @@ userSchema.statics.format = function(user) {
     username: user.username,
     name: user.name,
     isOfLegalAge: user.isOfLegalAge,
-    id: user._id
+    id: user._id,
+    blogs: user.blogs
   }
   return formattedUser
 }
