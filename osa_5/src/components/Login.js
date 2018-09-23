@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 
 class Login extends Component {
   constructor(props) {
@@ -20,20 +21,17 @@ class Login extends Component {
 
   login = async (event) => {
     event.preventDefault()
+    const { setStateValue, createNotification } = this.props
     try{
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
-      this.props.setStateValue('user', user)
+      blogService.setToken(user.token)
+      setStateValue('user', user)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
     } catch(exception) {
-      this.setState({
-        error: 'username or password invalid',
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      createNotification(false, 'invalid username or password')
     }
   }
 
