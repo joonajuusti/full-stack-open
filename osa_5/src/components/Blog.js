@@ -21,7 +21,7 @@ const styles = () => ({
   }
 })
 
-const Blog = ({ blog, classes }) => {
+const Blog = ({ blog, classes, addLikeToBlog }) => {
   return(
     <ExpansionPanel>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
@@ -33,7 +33,7 @@ const Blog = ({ blog, classes }) => {
         <Typography>{`added by ${blog.user[0].name}`}</Typography>
         <Typography>{`likes: ${blog.likes}`}</Typography>
         <div>
-          <IconButton color="primary">
+          <IconButton color="primary" onClick={addLikeToBlog(blog)}>
             <ThumbUp />
           </IconButton>
         </div>
