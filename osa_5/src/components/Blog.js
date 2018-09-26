@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import IconButton from '@material-ui/core/IconButton'
 import ThumbUp from '@material-ui/icons/ThumbUp'
+import PropTypes from 'prop-types'
 
 const styles = () => ({
   summary: {
@@ -40,6 +41,12 @@ const Blog = ({ blog, classes, addLikeToBlog }) => {
       </ExpansionPanelDetails>
     </ExpansionPanel>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object,
+  classes: PropTypes.object,
+  addLikeToBlog: PropTypes.func
 }
 
 export default withStyles(styles)(Blog)

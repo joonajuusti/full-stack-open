@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 class Login extends Component {
   constructor(props) {
@@ -60,6 +61,11 @@ class Login extends Component {
       </form>
     );
   }
+}
+
+Login.propTypes = {
+  setStateValue: PropTypes.func,
+  createNotification: PropTypes.func
 }
 
 export default Login;

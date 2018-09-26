@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class BlogForm extends Component {
   constructor(props) {
@@ -60,6 +61,10 @@ class BlogForm extends Component {
       </div>
     );
   }
+}
+
+BlogForm.propTypes = {
+  addBlog: PropTypes.func
 }
 
 export default BlogForm;
