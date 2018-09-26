@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 class App extends React.Component {
@@ -48,6 +49,7 @@ class App extends React.Component {
         const blogs = this.state.blogs.concat(response)
         this.setState({ blogs })
         this.createNotification(true, `${response.title} by ${response.author} added`)
+        this.blogForm.toggleVisibility()
       })
       .catch(error => console.log(error.message))
   }
@@ -70,7 +72,9 @@ class App extends React.Component {
                 {`${this.state.user.name} logged in`}
                 <button onClick={this.logout}>{'logout'}</button>
               </p>
-              <BlogForm addBlog={this.addBlog}/>
+              <Togglable buttonLabel="new blog" ref={component => this.blogForm = component}>
+                <BlogForm addBlog={this.addBlog}/>
+              </Togglable>
               <h2>blogs</h2>
               {this.state.blogs.map(blog => 
                 <Blog key={blog.id} blog={blog}/>

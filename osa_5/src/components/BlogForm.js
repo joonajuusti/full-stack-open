@@ -23,6 +23,7 @@ class BlogForm extends Component {
     const { title, author, url } = this.state
     const newBlog = { title, author, url }
     this.props.addBlog(newBlog)
+    this.setState({ title: '', author: '', url: '' })
   }
 
   render() {
