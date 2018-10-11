@@ -22,7 +22,7 @@ const styles = () => ({
   }
 })
 
-const Blog = ({ blog, classes, addLikeToBlog }) => {
+export const Blog = ({ blog, classes, addLikeToBlog }) => {
   return(
     <ExpansionPanel>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
