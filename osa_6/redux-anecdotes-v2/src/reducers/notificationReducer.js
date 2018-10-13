@@ -8,16 +8,17 @@ const notificationReducer = (store = '', action) => {
   return store
 }
 
-export const notificationCreation = notification => {
-  return {
-    type: 'NOTIFY',
-    notification: notification
-  }
-}
-
-export const notificationRemoval = () => {
-  return {
-    type: 'REMOVE'
+export const notify = (notification, timeInSeconds) => {
+  return async dispatch => {
+    dispatch({
+      type: 'NOTIFY',
+      notification: notification
+    })
+    setTimeout(() => {
+      dispatch({
+        type: 'REMOVE'
+      })
+    }, 1000 * timeInSeconds)
   }
 }
 
