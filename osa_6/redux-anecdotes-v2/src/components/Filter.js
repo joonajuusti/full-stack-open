@@ -1,21 +1,19 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { filterChanging } from '../reducers/filterReducer'
 
-class Filter extends React.Component {
-  handleChange = event => {
-    this.props.store.dispatch(filterChanging(event.target.value))
+const Filter = props => {
+  const style = {
+    marginBottom: 10
   }
-  render() {
-    const style = {
-      marginBottom: 10
-    }
-
-    return (
-      <div style={style}>
-        filter <input onChange={this.handleChange}/>
-      </div>
-    )
-  }
+  return (
+    <div style={style}>
+      filter <input onChange={event => props.filterChanging(event.target.value)}/>
+    </div>
+  )
 }
 
-export default Filter
+export default connect(
+  null,
+  { filterChanging }
+)(Filter)

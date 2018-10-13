@@ -1,34 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { anecdoteVoting } from '../reducers/anecdoteReducer'
 import { notificationCreation, notificationRemoval } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
   vote = id => () => {
-    const { store } = this.props
-    const anecdotes = this.getAnecdotes()
-    const votedAnecdote = anecdotes.find(anecdote => anecdote.id === id)
-    store.dispatch(anecdoteVoting(id))
-    store.dispatch(notificationCreation(`you voted anecdote '${votedAnecdote.content}'`))
+    const votedAnecdote = this.props.anecdotes.find(anecdote => anecdote.id === id)
+    this.props.anecdoteVoting(id)
+    this.props.notificationCreation(`you voted anecdote '${votedAnecdote.content}'`)
     setTimeout(() => {
-      store.dispatch(notificationRemoval())
+      this.props.notificationRemoval()
     }, 5000)
-  }
-
-  getAnecdotes = () => {
-    return this.props.store.getState().anecdotes
-  }
-
-  getFilteredAnecdotes = () => {
-    const anecdotes = this.getAnecdotes()
-    const filter = this.props.store.getState().filter
-    return anecdotes.filter(anecdote => anecdote.content.includes(filter))
   }
 
   render() {
     return (
       <div>
         <h2>Anecdotes</h2>
-        {this.getFilteredAnecdotes().sort((a, b) => b.votes - a.votes).map(anecdote =>
+        {this.props.anecdotes.map(anecdote =>
           <div key={anecdote.id}>
             <div>
               {anecdote.content}
@@ -46,4 +35,24 @@ class AnecdoteList extends React.Component {
   }
 }
 
-export default AnecdoteList
+const filterAnecdotes = (anecdotes, filter) => {
+  return anecdotes.filter(anecdote => anecdote.content.includes(filter))
+}
+
+const sortAnecdotes = anecdotes => {
+  return anecdotes.sort((a, b) => b.votes - a.votes)
+}
+
+const mapStateToProps = state => {
+  return {
+    anecdotes: sortAnecdotes(filterAnecdotes(state.anecdotes, state.filter))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  {
+    anecdoteVoting,
+    notificationCreation,
+    notificationRemoval
+  })(AnecdoteList)
