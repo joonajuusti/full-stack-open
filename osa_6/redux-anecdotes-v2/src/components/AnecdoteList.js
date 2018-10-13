@@ -1,21 +1,41 @@
 import React from 'react'
+import { anecdoteVoting } from '../reducers/anecdoteReducer'
+import { notificationCreation, notificationRemoval } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
+  vote = id => () => {
+    const { store } = this.props
+    const anecdotes = this.getAnecdotes()
+    const votedAnecdote = anecdotes.find(anecdote => anecdote.id === id)
+    store.dispatch(anecdoteVoting(id))
+    store.dispatch(notificationCreation(`you voted anecdote '${votedAnecdote.content}'`))
+    setTimeout(() => {
+      store.dispatch(notificationRemoval())
+    }, 5000)
+  }
+
+  getAnecdotes = () => {
+    return this.props.store.getState().anecdotes
+  }
+
+  getFilteredAnecdotes = () => {
+    const anecdotes = this.getAnecdotes()
+    const filter = this.props.store.getState().filter
+    return anecdotes.filter(anecdote => anecdote.content.includes(filter))
+  }
+
   render() {
-    const anecdotes = this.props.store.getState()
     return (
       <div>
         <h2>Anecdotes</h2>
-        {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
+        {this.getFilteredAnecdotes().sort((a, b) => b.votes - a.votes).map(anecdote =>
           <div key={anecdote.id}>
             <div>
               {anecdote.content}
             </div>
             <div>
               has {anecdote.votes}
-              <button onClick={() =>
-                this.props.store.dispatch({ type: 'VOTE', id: anecdote.id })
-              }>
+              <button onClick={this.vote(anecdote.id)}>
                 vote
               </button>
             </div>
